@@ -154,8 +154,8 @@ if df_file:
     df_total = df_total[df_total["Skład"] != "SKK"]
     
     # --- Ołtarzew 2 ---
-    df_p_oltarzew.rename(columns={'Id Materiału': 'Nr kartoteki'}, inplace=True)
-    df_p_oltarzew = df_p[df_p['Nr kartoteki'].isin(df_oltarzew['Nr kartoteki'])].copy()
+    df_p_oltarzew = df_p[df_p['Id Materiału'].isin(df_oltarzew['Nr kartoteki'])].copy()
+    df_p_oltarzew.rename(columns={'Id Materiału': 'Nr kartoteki'}, inplace=True) 
     df_oltarzew_rabaty = df_oltarzew[['Nr kartoteki', 'Max rabat z wolnego']]
     df_p_oltarzew = df_p_oltarzew.merge(df_oltarzew_rabaty, on='Nr kartoteki', how='left')
     df_oltarzew_2 = df_p_oltarzew[df_p_oltarzew['Rabat Promocyjny'] == df_p_oltarzew['Max rabat z wolnego']].copy()
