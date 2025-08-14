@@ -104,8 +104,12 @@ if df_file:
         
         # Minimalny rabat z df_p
         df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'], errors='coerce')
+        
+        # Minimalny rabat z df_p
         df_p_min = df_p.groupby('Id Materiału')['Rabat Promocyjny'].min()
-        df_wsadowy['Max rabat z wolnego'] = df_wsadowy['Nr kartoteki'].map(lambda x: df_p_min.get(x, 0))
+        df_wsadowy['Max rabat z wolnego'] = df_wsadowy['Nr kartoteki'].map(df_p_min)
+        df_wsadowy['Max rabat z wolnego'] = df_wsadowy['Max rabat z wolnego'].fillna(0)  # jeśli brak dopasowania
+
         
         # Cena z oferty Neuca
         df_a_cena = df_a.set_index('Indeks kartoteki')['Cena Neuca']
