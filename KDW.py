@@ -90,8 +90,9 @@ if df_file:
         dzis = pd.to_datetime(datetime.today().date())
         
         # Kolumna 0-1 jeśli mniej niż 9 miesięcy
+        df_wsadowy['Data ważności'] = pd.to_datetime(df_wsadowy['Data ważności'], errors='coerce')
         df_wsadowy['Data poniżej 9-ciu msc'] = df_wsadowy['Data ważności'].apply(
-            lambda x: 1 if (pd.to_datetime(x) - dzis).days <= 9*30 else 0
+            lambda x: 1 if pd.notna(x) and (x - dzis).days <= 9*30 else 0
         )
         
         # Minimalny rabat z df_p
