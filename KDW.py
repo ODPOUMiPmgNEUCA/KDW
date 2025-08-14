@@ -149,8 +149,8 @@ if df_file:
     st.write(df_total.head())
 
 
-    df_oltarzew = df_oltarzew[df_oltarzew["Skład" != "SKK"]]
-    df_total = df_total[df_total["Skład" != "SKK"]]
+    df_oltarzew = df_oltarzew[df_oltarzew["Skład"] != "SKK"]
+    df_total = df_total[df_total["Skład"] != "SKK"]
 
 if df_file:
     # Tworzymy plik Excel w pamięci
