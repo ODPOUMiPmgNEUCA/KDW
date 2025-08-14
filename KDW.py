@@ -152,26 +152,45 @@ if df_file:
     df_oltarzew = df_oltarzew[df_oltarzew["Skład"] != "SKK"]
     df_total = df_total[df_total["Skład"] != "SKK"]
 
+
+
+    # --- Ołtarzew 2 ---
+    df_p_oltarzew = df_p[df_p['numer_kartoteki'].isin(df_oltarzew['numer_kartoteki'])].copy()
+    # Dołączamy maksymalny rabat z df_oltarzew
+    df_oltarzew_rabaty = df_oltarzew[['numer_kartoteki', 'Max rabat z wolnego']]
+    df_p_oltarzew = df_p_oltarzew.merge(df_oltarzew_rabaty, on='numer_kartoteki', how='left')
+    # Filtrowanie promocji z maksymalnym rabatem
+    df_oltarzew_2 = df_p_oltarzew[df_p_oltarzew['rabat'] == df_p_oltarzew['Rabat max']].copy()
+    
+    # --- Total 2 ---
+    df_p_total = df_p[df_p['numer_kartoteki'].isin(df_total['numer_kartoteki'])].copy()
+    df_total_rabaty = df_total[['numer_kartoteki', 'Max rabat z wolnego']]
+    df_p_total = df_p_total.merge(df_total_rabaty, on='numer_kartoteki', how='left')
+    df_total_2 = df_p_total[df_p_total['rabat'] == df_p_total['Rabat max']].copy()
+    
+
+# --- Eksport do Excela ---
 if df_file:
-    # Tworzymy kopie DataFrame i konwertujemy EAN na tekst
-    df_oltarzew_copy = df_oltarzew.copy()
-    df_oltarzew_copy['EAN'] = df_oltarzew_copy['EAN'].apply(lambda x: str(int(x)) if pd.notna(x) else '')
-
-    df_total_copy = df_total.copy()
-    df_total_copy['EAN'] = df_total_copy['EAN'].apply(lambda x: str(int(x)) if pd.notna(x) else '')
-
-    # Tworzymy plik Excel w pamięci
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df_oltarzew_copy.to_excel(writer, sheet_name='Ołtarzew', index=False)
-        df_total_copy.to_excel(writer, sheet_name='Total', index=False)
-    output.seek(0)  # ważne, żeby zacząć od początku
+        # Zapisujemy arkusze
+        df_oltarzew.to_excel(writer, sheet_name='Ołtarzew', index=False)
+        df_total.to_excel(writer, sheet_name='Total', index=False)
+        df_oltarzew_2.to_excel(writer, sheet_name='Ołtarzew 2', index=False)
+        df_total_2.to_excel(writer, sheet_name='Total 2', index=False)
 
-    # Guzik do pobrania
+        # Formatowanie kolumny EAN jako tekst
+        for sheet in ['Ołtarzew', 'Total', 'Ołtarzew 2', 'Total 2']:
+            ws = writer.sheets[sheet]
+            for col in ws.iter_cols():
+                if col[0].value and "ean" in str(col[0].value).lower():
+                    for cell in col:
+                        cell.number_format = "@"
+
+    output.seek(0)
     st.download_button(
-        label="Pobierz przetworzony plik Excel",
+        label="Pobierz przetworzony plik KDW",
         data=output,
-        file_name=f'przetworzony_kdw_{datetime.now().strftime("%Y%m%d")}.xlsx',
+        file_name=f'KDW_{datetime.now().strftime("%Y%m%d")}.xlsx',
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
-
