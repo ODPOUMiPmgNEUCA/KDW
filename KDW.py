@@ -155,15 +155,15 @@ if df_file:
     
     # --- Ołtarzew 2 ---
     df_p_oltarzew = df_p[df_p['Id Materiału'].isin(df_oltarzew['Nr kartoteki'])].copy()
-    df_oltarzew_rabaty = df_oltarzew[['numer_kartoteki', 'Rabat max']]
+    df_oltarzew_rabaty = df_oltarzew[['Nr kartoteki', 'Max rabat z wolnego']]
     df_p_oltarzew = df_p_oltarzew.merge(df_oltarzew_rabaty, on='Nr kartoteki', how='left')
-    df_oltarzew_2 = df_p_oltarzew[df_p_oltarzew['Rabat Promocyjny'] == df_p_oltarzew['Rabat max']].copy()
+    df_oltarzew_2 = df_p_oltarzew[df_p_oltarzew['Rabat Promocyjny'] == df_p_oltarzew['Max rabat z wolnego']].copy()
     
     # --- Total 2 ---
     df_p_total = df_p[df_p['Id Materiału'].isin(df_total['Nr kartoteki'])].copy()
-    df_total_rabaty = df_total[['numer_kartoteki', 'Rabat max']]
+    df_total_rabaty = df_total[['Nr kartoteki', 'Max rabat z wolnego']]
     df_p_total = df_p_total.merge(df_total_rabaty, on='Nr kartoteki', how='left')
-    df_total_2 = df_p_total[df_p_total['Rabat Promocyjny'] == df_p_total['Rabat max']].copy()
+    df_total_2 = df_p_total[df_p_total['Rabat Promocyjny'] == df_p_total['Max rabat z wolnego']].copy()
     
     # --- Eksport do Excela ---
     if df_file:
