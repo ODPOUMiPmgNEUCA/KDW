@@ -69,7 +69,7 @@ df_p = df_p[df_p["Rabat Promocyjny"] != 0]
 df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'].str.replace(',', '.')  # Zastąp przecinki kropkami, jeśli są
 df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'].str.strip()  # Usuwanie białych znaków
 # Konwersja na typ numeryczny (float), w przypadku problemów, zamienia wartości na NaN
-df_p['Rabat Promocyjny'] = pd.to_numeric(df['Rabat Promocyjny'])
+df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'])
 df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'].abs()
 df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'] / 100
 # Zaokrąglenie do 2 miejsc po przecinku (opcjonalnie)
