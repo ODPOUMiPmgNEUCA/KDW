@@ -56,6 +56,7 @@ if df_p:
 kolumny_p = [
     'Id Materiału', 'identyfikator promocji', 'Nazwa Promocji', 'Nr zlecenia', 'Skład (SPR,SGL)', 'Rabat Promocyjny'
 ]
+df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'], errors='coerce')
 df_p = df_p[kolumny_p]
 
 
