@@ -19,7 +19,7 @@ import plotly.graph_objects as go
 from urllib.request import urlopen
 import json
 import io
-import datetime
+from datetime import datetime
 
 
 
