@@ -81,17 +81,37 @@ df_file = st.file_uploader(
 )
 
 if df_file:
-    # Wczytanie dwóch arkuszy jako osobne DataFrame'y
+    # Wczytanie arkuszy
     df_oltarzew = pd.read_excel(df_file, sheet_name='Ołtarzew')
     df_total = pd.read_excel(df_file, sheet_name='Total')
+
+    # Funkcja do dodania kolumn
+    def przetworz_wsadowy(df_wsadowy, df_p, df_a):
+        dzis = pd.to_datetime(datetime.today().date())
+        
+        # Kolumna 0-1 jeśli mniej niż 9 miesięcy
+        df_wsadowy['Data poniżej 9-ciu msc'] = df_wsadowy['Data ważności'].apply(
+            lambda x: 1 if (pd.to_datetime(x) - dzis).days <= 9*30 else 0
+        )
+        
+        # Minimalny rabat z df_p
+        df_p_min = df_p.groupby('Id Materiału')['Rabat Promocyjny'].min()
+        df_wsadowy['Max rabat z wolnego'] = df_wsadowy['Nr kartoteki'].map(lambda x: df_p_min.get(x, 0))
+        
+        # Cena z oferty Neuca
+        df_a_cena = df_a.set_index('Indeks kartoteki')['Cena Neuca']
+        df_wsadowy['Cena Neuca'] = df_wsadowy['Nr kartoteki'].map(lambda x: df_a_cena.get(x, 0))
+        
+        return df_wsadowy
+
+    # Przetwarzamy oba arkusze
+    df_oltarzew = przetworz_wsadowy(df_oltarzew, df_p, df_a)
+    df_total = przetworz_wsadowy(df_total, df_p, df_a)
     
-    # Wyświetlenie pierwszych kilku wierszy dla obu arkuszy
-    st.write("Arkusz Ołtarzew:")
+    st.write("Arkusz Ołtarzew po przetworzeniu:")
     st.write(df_oltarzew.head())
     
-    st.write("Arkusz Total:")
+    st.write("Arkusz Total po przetworzeniu:")
     st.write(df_total.head())
-
-
 
 
