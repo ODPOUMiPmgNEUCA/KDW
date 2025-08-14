@@ -162,6 +162,7 @@ if df_file:
     
     # --- Total 2 ---
     df_p_total = df_p[df_p['Id Materiału'].isin(df_total['Nr kartoteki'])].copy()
+    df_p_total.rename(columns={'Id Materiału': 'Nr kartoteki'}, inplace=True) 
     df_total_rabaty = df_total[['Nr kartoteki', 'Max rabat z wolnego']]
     df_p_total = df_p_total.merge(df_total_rabaty, on='Nr kartoteki', how='left')
     df_total_2 = df_p_total[df_p_total['Rabat Promocyjny'] == df_p_total['Max rabat z wolnego']].copy()
