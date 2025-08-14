@@ -43,6 +43,8 @@ div[class*="stSelectbox"] label {
 st.title("Automat KDW")
 
 
+
+################### RAPORT PROMOCYJNY ####################
 df_p = st.file_uploader(
     label = "Wrzuć plik RaportPromocyjny"
 )
@@ -51,7 +53,45 @@ if df_p:
     st.write(df_p.head())
 
 # Wybieranie tylko określonych kolumn z DataFrame
-kolumny = [
+kolumny_p = [
     'Id Materiału', 'identyfikator promocji', 'Nazwa Promocji', 'Nr zlecenia', 'Skład (SPR,SGL)', 'Rabat Promocyjny'
 ]
+df_p = df_p[kolumny_p]
+
+
+###################### ASORTYMENT NEUCA ########################
+df_a = st.file_uploader(
+    label = "Wrzuć plik Asortyment Neuca"
+)
+if df_a:
+    df_a = pd.read_excel(df_a)
+    st.write(df_a.head())
+
+# Wybieranie tylko określonych kolumn z DataFrame
+kolumny_a = [
+    'Indeks kartoteki', 'Cena Neuca', 'EAN', 'BLOZ'
+]
+
+df_a = df_a[kolumny_a]
+
+
+####################### WSADOWY #########################
+df_file = st.file_uploader(
+    label="Wrzuć plik wsadowy"
+)
+
+if df_file:
+    # Wczytanie dwóch arkuszy jako osobne DataFrame'y
+    df_oltarzew = pd.read_excel(df_file, sheet_name='Ołtarzew')
+    df_total = pd.read_excel(df_file, sheet_name='Total')
+    
+    # Wyświetlenie pierwszych kilku wierszy dla obu arkuszy
+    st.write("Arkusz Ołtarzew:")
+    st.write(df_oltarzew.head())
+    
+    st.write("Arkusz Total:")
+    st.write(df_total.head())
+
+
+
 
