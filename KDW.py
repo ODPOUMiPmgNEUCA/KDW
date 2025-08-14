@@ -104,8 +104,8 @@ if df_file:
         
         # Minimalny rabat z df_p
         # Upewniamy się, że typy są zgodne
-        df_wsadowy['Nr kartoteki'] = df_wsadowy['Nr kartoteki'].astype(str)
-        df_p['Id Materiału'] = df_p['Id Materiału'].astype(str)
+        #df_wsadowy['Nr kartoteki'] = df_wsadowy['Nr kartoteki'].astype(str)
+        #df_p['Id Materiału'] = df_p['Id Materiału'].astype(str)
         
         df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'], errors='coerce')
         
