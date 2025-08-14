@@ -64,7 +64,7 @@ df_a = st.file_uploader(
     label = "Wrzuć plik Asortyment Neuca"
 )
 if df_a:
-    df_a = pd.read_excel(df_a)
+    df_a = pd.read_excel(df_a, sheet_name='Asortyment')
     st.write(df_a.head())
 
 # Wybieranie tylko określonych kolumn z DataFrame
