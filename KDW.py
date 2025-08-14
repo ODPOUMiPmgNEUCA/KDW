@@ -173,4 +173,5 @@ if df_file:
         data=output,
         file_name=f'przetworzony_kdw_{datetime.now().strftime("%Y%m%d")}.xlsx',
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
 
