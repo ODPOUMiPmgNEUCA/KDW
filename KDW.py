@@ -109,6 +109,10 @@ if df_file:
         # Cena z oferty Neuca
         df_a_cena = df_a.set_index('Indeks kartoteki')['Cena Neuca']
         df_wsadowy['Cena Neuca'] = df_wsadowy['Nr kartoteki'].map(lambda x: df_a_cena.get(x, 0))
+
+        # EAN z oferty Neuca
+        df_a_ean = df_a.set_index('Indeks kartoteki')['EAN']
+        df_wsadowy['EAN'] = df_wsadowy['Nr kartoteki'].map(lambda x: df_a_ean.get(x, np.nan))
         
         return df_wsadowy
 
