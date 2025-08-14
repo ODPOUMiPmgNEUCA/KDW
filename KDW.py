@@ -56,7 +56,7 @@ if df_p:
 kolumny_p = [
     'Id Materiału', 'identyfikator promocji', 'Nazwa Promocji', 'Nr zlecenia', 'Skład (SPR,SGL)', 'Rabat Promocyjny'
 ]
-df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'], errors='coerce')
+
 df_p = df_p[kolumny_p]
 # Filtrowanie wierszy
 df_p = df_p[
@@ -103,6 +103,7 @@ if df_file:
         )
         
         # Minimalny rabat z df_p
+        df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'], errors='coerce')
         df_p_min = df_p.groupby('Id Materiału')['Rabat Promocyjny'].min()
         df_wsadowy['Max rabat z wolnego'] = df_wsadowy['Nr kartoteki'].map(lambda x: df_p_min.get(x, 0))
         
