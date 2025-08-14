@@ -58,6 +58,12 @@ kolumny_p = [
 ]
 df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'], errors='coerce')
 df_p = df_p[kolumny_p]
+# Filtrowanie wierszy
+df_p = df_p[
+    (df_p['Nr zlecenia'] != '61114') &  # usuń wiersze z Nr zlecenia 61114
+    (~df_p['Nazwa Promocji'].str.contains('BKS', na=False))  # usuń wiersze z 'BKS' w nazwie promocji
+]
+
 
 
 ###################### ASORTYMENT NEUCA ########################
