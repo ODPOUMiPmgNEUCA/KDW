@@ -149,3 +149,23 @@ if df_file:
     st.write(df_total.head())
 
 
+    df_oltarzew = df_oltarzew[df_oltarzew["Skład" != "SKK"]]
+    df_total = df_total[df_total["Skład" != "SKK"]]
+
+if df_file:
+    # Tworzymy plik Excel w pamięci
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df_oltarzew.to_excel(writer, sheet_name='Ołtarzew', index=False)
+        df_total.to_excel(writer, sheet_name='Total', index=False)
+    output.seek(0)  # ważne, żeby zacząć od początku
+
+    # Guzik do pobrania
+    st.download_button(
+        label="Pobierz przetworzony plik Excel",
+        data=output,
+        file_name=f'przetworzony_kdw_{datetime.now().strftime("%Y%m%d")}.xlsx',
+        mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+
+
