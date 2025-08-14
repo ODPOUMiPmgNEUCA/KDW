@@ -63,6 +63,18 @@ df_p = df_p[
     (df_p['Nr zlecenia'] != '61114') &  # usuń wiersze z Nr zlecenia 61114
     (~df_p['Nazwa Promocji'].str.contains('BKS', na=False))  # usuń wiersze z 'BKS' w nazwie promocji
 ]
+# Oczyszczanie kolumny 'Rabat Promocyjny'
+df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'].fillna(0)
+df_p = df_p[df_p["Rabat Promocyjny"] != 0]
+df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'].str.replace(',', '.')  # Zastąp przecinki kropkami, jeśli są
+df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'].str.strip()  # Usuwanie białych znaków
+# Konwersja na typ numeryczny (float), w przypadku problemów, zamienia wartości na NaN
+df_p['Rabat Promocyjny'] = pd.to_numeric(df['Rabat Promocyjny'])
+df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'].abs()
+df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'] / 100
+# Zaokrąglenie do 2 miejsc po przecinku (opcjonalnie)
+df_p['Rabat Promocyjny'] = df_p['Rabat Promocyjny'].round(4)
+df_p = df_p[df_p["Rabat Promocyjny"] != 0]
 
 
 
@@ -107,12 +119,12 @@ if df_file:
         #df_wsadowy['Nr kartoteki'] = df_wsadowy['Nr kartoteki'].astype(str)
         #df_p['Id Materiału'] = df_p['Id Materiału'].astype(str)
         
-        df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'], errors='coerce')
+        #df_p['Rabat Promocyjny'] = pd.to_numeric(df_p['Rabat Promocyjny'], errors='coerce')
         
         # Minimalny rabat z df_p
 
-        df_p_min = df_p.groupby('Id Materiału')['Rabat Promocyjny'].min()
-        df_wsadowy['Max rabat z wolnego'] = df_wsadowy['Nr kartoteki'].map(df_p_min)
+        df_p_max = df_p.groupby('Id Materiału')['Rabat Promocyjny'].max()
+        df_wsadowy['Max rabat z wolnego'] = df_wsadowy['Nr kartoteki'].map(df_p_max)
         df_wsadowy['Max rabat z wolnego'] = df_wsadowy['Max rabat z wolnego'].fillna(0)  # jeśli brak dopasowania
 
         
