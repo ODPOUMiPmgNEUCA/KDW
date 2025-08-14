@@ -153,11 +153,18 @@ if df_file:
     df_total = df_total[df_total["Skład"] != "SKK"]
 
 if df_file:
+    # Tworzymy kopie DataFrame i konwertujemy EAN na tekst
+    df_oltarzew_copy = df_oltarzew.copy()
+    df_oltarzew_copy['EAN'] = df_oltarzew_copy['EAN'].apply(lambda x: str(int(x)) if pd.notna(x) else '')
+
+    df_total_copy = df_total.copy()
+    df_total_copy['EAN'] = df_total_copy['EAN'].apply(lambda x: str(int(x)) if pd.notna(x) else '')
+
     # Tworzymy plik Excel w pamięci
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df_oltarzew.to_excel(writer, sheet_name='Ołtarzew', index=False)
-        df_total.to_excel(writer, sheet_name='Total', index=False)
+        df_oltarzew_copy.to_excel(writer, sheet_name='Ołtarzew', index=False)
+        df_total_copy.to_excel(writer, sheet_name='Total', index=False)
     output.seek(0)  # ważne, żeby zacząć od początku
 
     # Guzik do pobrania
@@ -166,6 +173,4 @@ if df_file:
         data=output,
         file_name=f'przetworzony_kdw_{datetime.now().strftime("%Y%m%d")}.xlsx',
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-
 
